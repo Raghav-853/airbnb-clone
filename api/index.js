@@ -6,6 +6,7 @@ const jwt = require('jsonwebtoken');
 const UserModel = require('./models/User');
 const cookieParser = require('cookie-parser');
 const User = require('./models/User');
+const imageDownloader = require('image-downloader');
 const bcryptjs = require('bcryptjs');
 const jsonwebtoken = require('jsonwebtoken');
 require('dotenv').config();
@@ -77,6 +78,18 @@ app.get('/profile', (req, res) => {
     } else{
         res.json(null);
     }
+});
+app.post('/logout', (req,res) => {
+    res.cookie('token', '').json(true);
+});
+
+app.post(' /upload-by-link', async (req, res) => {
+    const {link} = req.body;
+    await imageDownloader.image({
+        url: link, 
+        dest: __dirname+'/uploads/' +newName,
+    });
+    res.json(__dirname+'/uploads/' +newName);
 })
 
 app.listen(4000);
