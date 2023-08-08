@@ -1,11 +1,12 @@
 import PhotosUploader from "./PhotosUploader";
 import Perks from "../Perks";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AccountNav from "../AccountNav";
 import axios from "axios";
-import { Navigate } from "react-router-dom";
+import { Navigate, useParams } from "react-router-dom";
 
 export default function PlacesFormPage(){
+    const {id} = useParams();
     const [title, setTitle] = useState('');
     const [address, setAddress] = useState('');
     const [addedPhotos, setAddedPhotos] = useState('');
@@ -14,9 +15,26 @@ export default function PlacesFormPage(){
     const [extraInfo, setExtraInfo] = useState('');
     const [checkIn, setCheckIn] = useState('');
     const [checkOut, setCheckOut] = useState('');
-    const [maxGuest, setMaxGuests] = useState(1);
+    const [maxGuests, setMaxGuests] = useState(1);
     const [redirect, setRedirect] = useState(false);
+    useEffect(() => {
+        if(!id) {
+            return;
+        }
+        axios.get('/places/' +id).then( response => {
+            const {data} = response;
+            setTitle(data.title);
+            setAddress(data.address);
+            setAddedPhotos(data.photos);
+            setDescription(data.description);
+            setPerks(data.perks);
+            setExtraInfo(data.extraInfo);
+            setCheckIn(data.checkIn);
+            setCheckOut(data.checkOut);
+            setMaxGuests(data.maxGuests);
 
+        })
+    }, [id]);
     function inputHeader(text){
         return(
 
@@ -38,14 +56,26 @@ export default function PlacesFormPage(){
             </>
         )
     }
-    async function addNewPlace(ev){
-        ev.preventDefault();
-        await axios.post('places', {
+    async function savePlace(ev){
+        const placeData = {
             title, address, addedPhotos, 
             description, perks, extraInfo, 
-            checkIn, checkOut, maxGuest
-        });
-        setRedirect(true);
+            checkIn, checkOut, maxGuests
+        }
+        ev.preventDefault();
+        if (id) {
+            //update
+            await axios.put('places', {
+                id, ...placeData
+            });
+            setRedirect(true);
+        }
+        else {
+            // new place    
+            await axios.post('places', placeData);
+            setRedirect(true);
+        }
+        
     }
 
     if(redirect){
@@ -55,7 +85,7 @@ export default function PlacesFormPage(){
     return(
         <div>
             <AccountNav/>
-        <form onSubmit={addNewPlace}>
+        <form onSubmit={savePlace}>
             {preInput('Title', 'Title for your place, should be short and catchy')}
             <input type="text" value={title} onChange={ev => setTitle(ev.target.value)} placeholder="title, for example: My Farmhouse"/>
             
@@ -94,7 +124,7 @@ export default function PlacesFormPage(){
                 <div>
                     <h3 className="mt-2 -mb-1">Max number of guests</h3>
                     <input type="number" 
-                    value={maxGuest} 
+                    value={maxGuests} 
                     onChange={ev => setMaxGuests(ev.target.value)}/>
                 </div>
             </div>
