@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import BookingWidget from "../BookingWidget";
 
 export default function PlacePage() {
     const {id} = useParams();
@@ -74,39 +75,18 @@ export default function PlacePage() {
                     </svg>
                     Show more photos</button>
             </div>
-            <div className="my-2">
-                <h2 className="text-2xl my-2 semibold">Description</h2>
-                {place.description}
-            </div>
-            <div className="grid grid-cols-2">
+            <div className="mt-8 grid gap-8 grid-cols-[2fr_1fr]">
                 <div>
+                    <div className="my-2">
+                    <h2 className="text-2xl my-2 semibold">Description</h2>
+                    {place.description}
+                </div>
                     Check-in time: {place.checkIn}:00 <br />
                     Check-out time: {place.checkOut}:00 <br />
                     Max number of guests: {place.maxGuests}
                 </div>
                 <div>
-                    <div className="bg-white shadow p-4 rounded-2xl">
-                        <div className="text-2xl text-center">
-                            Price:₹{place.price} / per night
-                        </div>
-                        <div className="border rounded-2xl">
-                            <div className="flex">
-                                <div className="py-3 px-4">
-                                    <label>Check in:</label>
-                                    <input type="date"/>
-                                </div>
-                                <div className="py-3 px-4 border-l">
-                                    <label>Check Out:</label>
-                                    <input type="date"/>
-                                </div>
-                            </div>
-                            <div className="py-3 px-4 border-l">
-                                <label>Number of Guests:</label>
-                                <input type="number" value={1}/>
-                            </div>
-                        </div>
-                        <button className="primary mt-4">Book this place</button>
-                    </div>
+                    <BookingWidget/>
                 </div>
             </div>
         </div>
