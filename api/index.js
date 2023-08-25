@@ -12,6 +12,8 @@ const multer = require('multer');
 const fs = require('fs');
 const bcryptjs = require('bcryptjs');
 const jsonwebtoken = require('jsonwebtoken');
+const BookingModel = require('./models/Booking');
+const Booking = require('./models/Booking')
 require('dotenv').config();
 const app = express();
 
@@ -168,6 +170,20 @@ app.put('/places/' , async (req, res) => {
 
 app.get('/places', async(req, res) => {
     res.json(await Place.find());
+});
+
+app.post('/bookings', (req, res)=> {
+    const {place, checkIn, checkOut, 
+        numberOfGuests, name, phone, price,
+    } = req.body;
+    Booking.create({
+        place, checkIn, checkOut, 
+        numberOfGuests, name, phone, price,
+    }).then((doc) => {
+        res.json(doc);
+    }).catch((err) => {
+        throw err;
+    });
 });
 
 app.listen(4000);

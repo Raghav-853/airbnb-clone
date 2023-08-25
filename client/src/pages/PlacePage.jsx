@@ -22,10 +22,10 @@ export default function PlacePage() {
             <div className="absolute inset-0 bg-white min-w-full min-h-screen">
                 <div className="p-8 grid gap-4">
                     <div>
-                        <h2 className="text-3xl">Photos of {place.title}</h2>
+                        <h2 className="text-3xl mr-38">Photos of {place.title}</h2>
                         <button onClick={() => setShowAllPhotos(false)} className="fixed right-8 top-8 flex gap-1 py-2 px-2 rounded-full shadow shadow-black bg-white">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
-                                <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm-1.72 6.97a.75.75 0 10-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 101.06 1.06L12 13.06l1.72 1.72a.75.75 0 101.06-1.06L13.06 12l1.72-1.72a.75.75 0 10-1.06-1.06L12 10.94l-1.72-1.72z" clip-rule="evenodd" />
+                                <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm-1.72 6.97a.75.75 0 10-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 101.06 1.06L12 13.06l1.72 1.72a.75.75 0 101.06-1.06L13.06 12l1.72-1.72a.75.75 0 10-1.06-1.06L12 10.94l-1.72-1.72z" clipRule="evenodd" />
                             </svg>
                         </button>
                     </div>
@@ -39,7 +39,7 @@ export default function PlacePage() {
         );
     }
     return(
-        <div className="mt-4 bg-gray-100 -mx-8 px-8 py-8">
+        <div className="mt-4 bg-gray-100 -mx-8 px-8 pt-8">
             <h1 className="text-3xl">{place.title}</h1>
             <a className="flex gap-1 my-2 font-semibold underline" target="_blank" href={"https:/maps.google.com/?q="+place.address}>
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -53,18 +53,18 @@ export default function PlacePage() {
                     <div>
                         {place.photos?.[0] && (
                             <div>
-                                <img className="aspect-square object-cover" src={'http://localhost:4000/uploads/'+place.photos?.[0]} alt="" />
+                                <img onClick={() => setShowAllPhotos(true)} className="cursor-pointer aspect-square object-cover" src={'http://localhost:4000/uploads/'+place.photos?.[0]} alt="" />
                             </div>
 
                         )}
                     </div>
                     <div className="grid">
                         {place.photos?.[1] && (
-                            <img className="aspect-square object-cover" src={'http://localhost:4000/uploads/'+place.photos?.[1]} alt="" />
+                            <img onClick={() => setShowAllPhotos(true)} className=" cursor-pointer aspect-square object-cover" src={'http://localhost:4000/uploads/'+place.photos?.[1]} alt="" />
                         )}
                         <div className="overflow-hidden">
                         {place.photos?.[2] && (
-                            <img className="aspect-square object-cover relative top-2" src={'http://localhost:4000/uploads/'+place.photos?.[2]} alt="" />
+                            <img onClick={() => setShowAllPhotos(true)} className=" cursor-pointer aspect-square object-cover relative top-2" src={'http://localhost:4000/uploads/'+place.photos?.[2]} alt="" />
                         )}
                         </div>
                     </div>
@@ -75,7 +75,7 @@ export default function PlacePage() {
                     </svg>
                     Show more photos</button>
             </div>
-            <div className="mt-8 grid gap-8 grid-cols-[2fr_1fr]">
+            <div className="mt-8 mb-8 grid gap-8 grid-cols-[2fr_1fr]">
                 <div>
                     <div className="my-2">
                     <h2 className="text-2xl my-2 semibold">Description</h2>
@@ -86,8 +86,14 @@ export default function PlacePage() {
                     Max number of guests: {place.maxGuests}
                 </div>
                 <div>
-                    <BookingWidget/>
+                    <BookingWidget place={place}/>
                 </div>
+            </div>
+            <div className="bg-white -mx-8 px-8 py-8 border-t">
+            <div>
+                <h2 className="text-2xl my-2 semibold">Extra info</h2>
+            </div>
+            <div className="mb-4 mt-2 text-sm text-gray-700 leading-5">{place.extraInfo}</div>
             </div>
         </div>
     );
